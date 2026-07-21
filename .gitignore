@@ -1,0 +1,49 @@
+# ====================================================================
+# Terraform
+# ====================================================================
+# State files - should NEVER be committed (contain sensitive data)
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Downloaded providers/plugins directory
+**/.terraform/*
+
+# Variable files with sensitive data (credentials, secrets)
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Saved plan files
+*.tfplan
+crash.log
+crash.*.log
+
+# ====================================================================
+# AWS
+# ====================================================================
+.aws/
+*.pem
+
+# ====================================================================
+# Kubernetes / Helm (for when we get there)
+# ====================================================================
+*.kubeconfig
+kubeconfig
+charts/*/charts/
+charts/*/Chart.lock
+
+# ====================================================================
+# OS / Editor
+# ====================================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# ====================================================================
+# Logs and temp files
+# ====================================================================
+*.log
+.env
