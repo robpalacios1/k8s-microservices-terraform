@@ -7,16 +7,12 @@ provider "aws" {
 # ====================================================================
 
 resource "aws_db_subnet_group" "main" {
-  name = "dev-db-subnet-group"
-
-  subnet_ids = [
-    "subnet-0063d05c85409b96f",
-    "subnet-037b863e5fe3b5852"
-  ]
+  name = "${var.environment}-db-subnet-group"
+  subnet_ids = var.private_subnets_ids
 
   tags = {
-    Name        = "dev-db-subnet-group"
-    Environment = "dev"
+    Name        = "${var.environment}-db-subnet-group"
+    Environment = "${var.environment}"
   }
 }
 
@@ -25,9 +21,9 @@ resource "aws_db_subnet_group" "main" {
 # ====================================================================
 
 resource "aws_security_group" "rds_sg" {
-  name        = "dev-rds-sg"
+  name        = "${var.environment}-rds-sg"
   description = "Security group for RDS instance"
-  vpc_id      = "vpc-021ab8ce158853394" # Replace with your VPC ID
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "PostgreSQL within VPC"
@@ -45,7 +41,7 @@ resource "aws_security_group" "rds_sg" {
   }
 
   tags = {
-    Name        = "dev-rds-sg"
-    Environment = "dev"
+    Name        = "${var.environment}-rds-sg"
+    Environment = "${var.environment}"
   }
 }
