@@ -7,7 +7,7 @@ provider "aws" {
 # ====================================================================
 
 resource "aws_db_subnet_group" "main" {
-  name = "${var.environment}-db-subnet-group"
+  name       = "${var.environment}-db-subnet-group"
   subnet_ids = var.private_subnets_ids
 
   tags = {
@@ -42,6 +42,36 @@ resource "aws_security_group" "rds_sg" {
 
   tags = {
     Name        = "${var.environment}-rds-sg"
+    Environment = "${var.environment}"
+  }
+}
+
+# ====================================================================
+# 3. RDS Instance
+# ====================================================================
+
+resource "aws_db_instance" "main" {
+  identifier     = "${var.environment}-postgres-db"
+  engine         = "postgres"
+  engine_version = "16.3"
+  instance_class = "db.t3.micro"
+
+  allocated_storage = 20
+  storage_type      = "gp3"
+
+  db_name  = "app_db"
+  username = var.db_username
+  password = var.db_password
+
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
+
+  publicly_accessible = false
+  skip_final_snapshot = true
+  multi_az            = false
+
+  tags = {
+    Name        = "${var.environment}-postgres-db"
     Environment = "${var.environment}"
   }
 }
