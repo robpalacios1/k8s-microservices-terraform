@@ -17,3 +17,10 @@ module "eks" {
   environment        = "dev"
   private_subnet_ids = module.vpc.private_subnets_ids
 }
+
+module "rds" {
+  source              = "../../modules/rds"
+  environment         = "dev"
+  vpc_id              = module.vpc.vpc_id
+  private_subnets_ids = module.vpc.private_subnets_ids
+}
