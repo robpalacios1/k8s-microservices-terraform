@@ -1,5 +1,5 @@
 provider "aws" {
-    region = "us-east-1"
+  region = "us-east-1"
 }
 
 # ====================================================================
@@ -7,17 +7,17 @@ provider "aws" {
 # ====================================================================
 
 resource "aws_ecr_repository" "users_service" {
-    name = "dev-users-service"
-    image_tag_mutability = "IMMUTABLE"
+  name                 = "dev-users-service"
+  image_tag_mutability = "IMMUTABLE"
 
-    image_scanning_configuration {
-        scan_on_push = true
-    }
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
-    tags = {
-        Name        = "dev-users-service-ecr"
-        Environment = "dev"
-    }
+  tags = {
+    Name        = "dev-users-service-ecr"
+    Environment = "dev"
+  }
 }
 
 # ====================================================================
@@ -25,15 +25,33 @@ resource "aws_ecr_repository" "users_service" {
 # ====================================================================
 
 resource "aws_ecr_repository" "orders_service" {
-    name = "dev-orders-service"
-    image_tag_mutability = "IMMUTABLE"
+  name                 = "dev-orders-service"
+  image_tag_mutability = "IMMUTABLE"
 
-    image_scanning_configuration {
-        scan_on_push = true
-    }
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
-    tags = {
-        Name        = "dev-orders-service-ecr"
-        Environment = "dev"
-    }
+  tags = {
+    Name        = "dev-orders-service-ecr"
+    Environment = "dev"
+  }
+}
+
+# ====================================================================
+# 3. Create ECR Repository - Products Service
+# ====================================================================
+
+resource "aws_ecr_repository" "products_service" {
+  name                 = "dev-products-service"
+  image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  tags = {
+    Name        = "dev-products-service-ecr"
+    Environment = "dev"
+  }
 }
