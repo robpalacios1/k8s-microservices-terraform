@@ -7,7 +7,7 @@ provider "aws" {
 # ====================================================================
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "dev-eks-cluster-role"
+  name = "${var.environment}-eks-cluster-role"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -23,8 +23,8 @@ resource "aws_iam_role" "eks_cluster_role" {
   })
 
   tags = {
-    Name        = "dev-eks-cluster-role"
-    Environment = "dev"
+    Name        = "${var.environment}-eks-cluster-role"
+    Environment = "${var.environment}"
   }
 }
 
@@ -38,15 +38,12 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 # ====================================================================
 
 resource "aws_eks_cluster" "main" {
-  name     = "dev-eks-cluster"
+  name     = "${var.environment}-eks-cluster"
   role_arn = aws_iam_role.eks_cluster_role.arn
-  version  = "1.36"
+  version  = var.cluster_version
 
   vpc_config {
-    subnet_ids = [
-      "subnet-04244be4f176f967f",
-      "subnet-05261df651f5f8686"
-    ]
+    subnet_ids = var.private_subnet_ids
   }
 
   depends_on = [
@@ -54,8 +51,8 @@ resource "aws_eks_cluster" "main" {
   ]
 
   tags = {
-    Name        = "dev-eks-cluster"
-    Environment = "dev"
+    Name        = "${var.environment}-eks-cluster"
+    Environment = "${var.environment}"
   }
 }
 
@@ -64,7 +61,7 @@ resource "aws_eks_cluster" "main" {
 # ====================================================================
 
 resource "aws_iam_role" "eks_node_role" {
-  name = "dev-eks-node-role"
+  name = "${var.environment}-eks-node-role"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -80,8 +77,8 @@ resource "aws_iam_role" "eks_node_role" {
   })
 
   tags = {
-    Name        = "dev-eks-node-role"
-    Environment = "dev"
+    Name        = "${var.environment}-eks-node-role"
+    Environment = "${var.environment}"
   }
 }
 
@@ -106,21 +103,18 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_read_only" {
 
 resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
-  node_group_name = "dev-node-group"
+  node_group_name = "${var.environment}-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
 
-  subnet_ids = [
-    "subnet-04244be4f176f967f",
-    "subnet-05261df651f5f8686"
-  ]
+  subnet_ids = var.private_subnet_ids
 
   scaling_config {
-    desired_size = 2
-    max_size     = 3
-    min_size     = 1
+    desired_size = var.node_desired_size
+    max_size     = var.node_max_size
+    min_size     = var.node_min_size
   }
 
-  instance_types = ["t3.micro"]
+  instance_types = var.node_instance_type
   capacity_type  = "ON_DEMAND"
 
   depends_on = [
@@ -130,7 +124,7 @@ resource "aws_eks_node_group" "main" {
   ]
 
   tags = {
-    Name        = "dev-node-group"
-    Environment = "dev"
+    Name        = "${var.environment}-node-group"
+    Environment = "${var.environment}"
   }
 }
