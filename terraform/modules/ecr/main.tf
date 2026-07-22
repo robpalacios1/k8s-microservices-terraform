@@ -19,3 +19,21 @@ resource "aws_ecr_repository" "users_service" {
         Environment = "dev"
     }
 }
+
+# ====================================================================
+# 2. Create ECR Repository - Orders Service
+# ====================================================================
+
+resource "aws_ecr_repository" "orders_service" {
+    name = "dev-orders-service"
+    image_tag_mutability = "IMMUTABLE"
+
+    image_scanning_configuration {
+        scan_on_push = true
+    }
+
+    tags = {
+        Name        = "dev-orders-service-ecr"
+        Environment = "dev"
+    }
+}
