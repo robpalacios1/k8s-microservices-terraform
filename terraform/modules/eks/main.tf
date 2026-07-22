@@ -44,8 +44,8 @@ resource "aws_eks_cluster" "main" {
 
   vpc_config {
     subnet_ids = [
-      "subnet-0f9526455f3119597",
-      "subnet-0cc71730fabf5a798"
+      "subnet-04244be4f176f967f",
+      "subnet-05261df651f5f8686"
     ]
   }
 
@@ -110,8 +110,8 @@ resource "aws_eks_node_group" "main" {
   node_role_arn   = aws_iam_role.eks_node_role.arn
 
   subnet_ids = [
-    "subnet-0f9526455f3119597",
-    "subnet-0cc71730fabf5a798"
+    "subnet-04244be4f176f967f",
+    "subnet-05261df651f5f8686"
   ]
 
   scaling_config {
