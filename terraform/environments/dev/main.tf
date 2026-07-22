@@ -23,4 +23,5 @@ module "rds" {
   environment         = "dev"
   vpc_id              = module.vpc.vpc_id
   private_subnets_ids = module.vpc.private_subnets_ids
+  db_password         = var.db_password
 }
