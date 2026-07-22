@@ -7,6 +7,11 @@ module "vpc" {
   environment = "dev"
 }
 
+module "ecr" {
+  source      = "../../modules/ecr"
+  environment = "dev"
+}
+
 module "eks" {
   source             = "../../modules/eks"
   environment        = "dev"
