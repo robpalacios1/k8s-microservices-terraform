@@ -99,3 +99,38 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_read_only" {
     role       = aws_iam_role.eks_node_role.name
     policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
+
+# ====================================================================
+# 4. EKS Node Group
+# ====================================================================
+
+resource "aws_eks_node_group" "main" {
+    cluster_name = aws.eks_cluster.main.name
+    node_group_name = "dev-node-group"
+    node_role_arn = aws.iam_role.eks_node_role.arn
+
+    subnet_ids = [
+        "subnet-0f9526455f3119597",
+        "subnet-0cc71730fabf5a798"
+    ]
+
+    scaling_config {
+        desired_size = 2
+        max_size     = 3
+        min_size     = 1
+    }
+
+    instance_types = ["t3.micro"]
+    capacity_type = "ON_DEMAND"
+
+    depends_on = [
+        aws_iam_role_policy_attachment.eks_worker_node_policy,
+        aws_iam_role_policy_attachment.eks_cni_policy,
+        aws_iam_role_policy_attachment.eks_ecr_read_only
+    ]
+
+    tags = {
+        Name        = "dev-node-group"
+        Environment = "dev"
+    }
+}
