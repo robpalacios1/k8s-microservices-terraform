@@ -1,0 +1,18 @@
+image:
+  repository: 490059499947.dkr.ecr.us-east-1.amazonaws.com/dev-users-service
+  tag: v1
+  pullpolicy: IfNotPresent
+
+replicaCount: 2
+
+Service:
+  port: 80
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
