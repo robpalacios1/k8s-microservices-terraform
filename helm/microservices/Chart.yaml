@@ -1,0 +1,9 @@
+apiVersion: v2
+name: microservices
+description: A Helm chart for deploying microservices
+version: 0.1.0
+
+dependencies:
+  - name: users-service
+    version: 0.1.0
+    repository: "file://charts/users-service"
